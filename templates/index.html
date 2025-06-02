@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Pogoda</title>
+</head>
+<body>
+    <h1>Sprawdź pogodę</h1>
+    <form method="POST" action="/">
+        <label for="country">Kraj:</label>
+        <select name="country" id="country" onchange="this.form.submit()">
+            {{range $country, $_ := .Locations}}
+                <option value="{{$country}}" {{if eq $country $.SelectedCountry}}selected{{end}}>{{$country}}</option>
+            {{end}}
+        </select>
+
+        <label for="city">Miasto:</label>
+        <select name="city" id="city">
+            {{range $city := index .Locations $.SelectedCountry}}
+                <option value="{{$city}}" {{if eq $city $.SelectedCity}}selected{{end}}>{{$city}}</option>
+            {{end}}
+        </select>
+        <button type="submit">Pokaż pogodę</button>
+    </form>
+
+    {{if .Weather}}
+    <h2>Pogoda w {{.SelectedCity}}</h2>
+    <ul>
+        <li>Temperatura: {{.Weather.temp}}°C</li>
+        <li>Opis: {{.Weather.desc}}</li>
+        <li>Wilgotność: {{.Weather.humidity}}%</li>
+        <li>Wiatr: {{.Weather.wind}} m/s</li>
+    </ul>
+    {{end}}
+</body>
+</html>
+
